@@ -1,0 +1,6 @@
+creating link_t 0x0x55a45b174300
+node_main()
+send frame()
+send frame()
+poller interrupted
+destroying link_t at 0x0x55a45b174300

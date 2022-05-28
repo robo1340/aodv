@@ -1,0 +1,15 @@
+creating link_t 0x0x563f65969300
+creating link_t 0x0x563f659685d0
+node_main()
+send message to node 0
+here
+send message to node 0
+here
+send message to node 0
+here
+send message to node 1
+here
+0
+poller interrupted
+destroying link_t at 0x0x563f65969300
+destroying link_t at 0x0x563f659685d0
