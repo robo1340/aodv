@@ -1,6 +1,6 @@
-creating link_t 0x0x558d7d3cf300
+creating link_t 0x0x55e2df70f300
 node_main()
 send frame()
 send frame()
 poller interrupted
-destroying link_t at 0x0x558d7d3cf300
+destroying link_t at 0x0x55e2df70f300

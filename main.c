@@ -8,6 +8,8 @@
 #include "frame_handler.h"
 #include "frame_sender.h"
 
+#include "aodv.h"
+
 zlistx_t * links; //list of	direct links to	nodes, elements	are	sockets
 zsock_t	* node_sink;
 zpoller_t * poller;
@@ -49,6 +51,9 @@ int	main (int argc,	char * argv[]) {
 			char endpoint[30];
 			sprintf(endpoint, "ipc:///tmp/%s\n",argv[2]);
 			node_sink = zsock_new_pull(endpoint);
+			
+			char * ptr;
+			aodv_init(strtoul(endpoint, &ptr, 10));
 		}
 	}
 	if(argc >= 6){
@@ -56,6 +61,9 @@ int	main (int argc,	char * argv[]) {
 			establish_links(links, argc-4, &argv[4]);
 		}
 	}
+	
+	
+	
 	
 	//set up the zpoller
 	poller = zpoller_new(node_sink, NULL);
