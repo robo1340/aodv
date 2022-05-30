@@ -1,7 +1,14 @@
-creating link_t 0x0x563f3e691300
+new link at address 3
 node_main()
+ind 0
+sending message to 3
+send frame()
 handle_received_frame()
 [0x 0,0x 1,0x 2,0x 3,0x 4]
+ind 0
+sending message to 3
+send frame()
+ind 0
+sending message to 3
 send frame()
 poller interrupted
-destroying link_t at 0x0x563f3e691300

@@ -1,6 +1,12 @@
-creating link_t 0x0x55e2df70f300
+new link at address 3
 node_main()
+ind 0
+sending message to 3
 send frame()
+ind 0
+sending message to 3
+send frame()
+ind 0
+sending message to 3
 send frame()
 poller interrupted
-destroying link_t at 0x0x55e2df70f300

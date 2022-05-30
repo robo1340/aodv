@@ -10,7 +10,7 @@
 
 #include "aodv.h"
 
-zlistx_t * links; //list of	direct links to	nodes, elements	are	sockets
+zhashx_t * links; //list of	direct links to	nodes, keys are uint64_t addresses, values are link_t
 zsock_t	* node_sink;
 zpoller_t * poller;
 
@@ -35,7 +35,7 @@ static void s_catch_signals (void)
 	sigaction (SIGKILL, &action, NULL);
 }
 
-static bool establish_links(zlistx_t * links, int link_args_count, char * link_args[]);
+static bool establish_links(zhashx_t * links, int link_args_count, char * link_args[]);
 static void node_main(void);
 static bool send_frame_proc(uint64_t last_send_time);
 
@@ -43,8 +43,10 @@ int	main (int argc,	char * argv[]) {
 	
 	srand(zclock_time());
 	
-	links = zlistx_new();
-	zlistx_set_destructor(links, (zlistx_destructor_fn*) link_destroy);
+	links = zhashx_new();
+	zhashx_set_destructor(links, (zhashx_destructor_fn*) link_destroy);
+	zhashx_set_key_duplicator(links, (zhashx_duplicator_fn*) address_create);
+	//zlistx_set_destructor(links, (zlistx_destructor_fn*) link_destroy);
 	
 	if(argc >= 3){
 		if (strcmp(argv[1],"-a")==0){
@@ -74,7 +76,7 @@ int	main (int argc,	char * argv[]) {
 	
 	//shut it down
 	zsock_destroy(&node_sink);
-	zlistx_destroy(&links);
+	zhashx_destroy(&links);
 	
 	return	0;
 }
@@ -116,19 +118,22 @@ static void node_main(void) {
 				
 			}
 		}
-
 	}
 }
 
-static bool establish_links(zlistx_t * links, int link_args_count, char * link_args[]){
+static bool establish_links(zhashx_t * links, int link_args_count, char * link_args[]){
 	int i;
 	
 	for (i=0; i<link_args_count; i+=2){
 		link_t * new_link = link_new(link_args[i], atof(link_args[i+1]));
 		
 		//link_destroy(&new_link);
-		
-		zlistx_add_end(links, new_link);
+		char * ptr;
+		uint64_t * addr = malloc(sizeof(uint64_t));
+		*addr = strtoul(link_args[i], &ptr, 10);
+		printf("new link at address %lu\n", *addr);
+		zhashx_insert(links, addr , new_link);
+		//zlistx_add_end(links, new_link);
 	}
 	
 	return true;
@@ -139,6 +144,7 @@ static bool establish_links(zlistx_t * links, int link_args_count, char * link_a
 static bool send_frame_proc(uint64_t last_send_time) {
 	int i;
 	
+	/*
 	if ((zclock_time() - last_send_time) > SEND_PERIOD_MS) {
 		uint8_t data[5] = {0,1,2,3,4};
 
@@ -156,6 +162,34 @@ static bool send_frame_proc(uint64_t last_send_time) {
 
 	}
 	return false;
+	*/
+	
+	
+	if ((zclock_time() - last_send_time) > SEND_PERIOD_MS) {
+		uint8_t data[5] = {0,1,2,3,4};
+
+		zlistx_t * addrs = zhashx_keys(links);
+		int ind = rand() % zlistx_size(addrs);
+		uint64_t * addr = (uint64_t *)zlistx_first(addrs);
+		printf("ind %d\n", ind);
+		for (i=1; i<=ind; i++){
+			if (ind==0) {break;}
+			addr = (uint64_t *)zlistx_next(addrs);	
+			printf("%lu\n",*addr);
+		}
+		if (addr == NULL) {return false;}
+		
+		printf("sending message to %lu\n", *addr);
+		void * link = zhashx_lookup(links, addr);
+		
+		zlistx_destroy(&addrs);
+		if (link != NULL) {
+			send_frame((link_t*)link, data, sizeof(data));
+		}
+
+	}
+	return false;
+	
 	
 }
 

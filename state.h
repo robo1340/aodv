@@ -14,6 +14,6 @@ typedef struct link_t{
 link_t * link_new(char * address, float reliability);
 void link_destroy(link_t ** to_destroy);
 
-
+void * address_create(void * addr);
 
 #endif // state_h
