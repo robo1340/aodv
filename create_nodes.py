@@ -22,33 +22,33 @@ if __name__	== "__main__":
 	logs = [log1,log2,log3,log4,log5,log6]
 	
 	#result = subprocess.run(['qmicli', '-d', self.device, command], stdout=subprocess.PIPE, timeout=5.0)
-	node1 = Popen(["./node", "-a", "0000000000000001", "-l",\
+	node1 = Popen(["./node", "-t", "source", "-a", "0000000000000001", "-l",\
 				   "0000000000000002", "0.95",\
 				   "0000000000000005", "0.99",\
-				   "0000000000000003", "0.99",\
 				  ], shell = USE_SHELL)#stdout=log1, shell = USE_SHELL)
 	
-	node2 = Popen(["./node", "-a", "0000000000000002", "-l",\
+	node2 = Popen(["./node", "-t", "static", "-a", "0000000000000002", "-l",\
+				   "0000000000000003", "0.95",\
 				   "0000000000000001", "0.95",\
 				   "0000000000000005", "0.99",\
 				   ], stdout=log2, shell = USE_SHELL)
 		
-	node3 = Popen(["./node", "-a", "0000000000000003", "-l",\
+	node3 = Popen(["./node", "-t", "static", "-a", "0000000000000003", "-l",\
 				   "0000000000000002", "0.95",\
 				   "0000000000000004", "0.99",\
 				   "0000000000000006", "0.95",\
 				   ], stdout=log3, shell = USE_SHELL)
 		
-	node4 = Popen(["./node", "-a", "0000000000000004", "-l",\
+	node4 = Popen(["./node", "-t", "static", "-a", "0000000000000004", "-l",\
 				   "0000000000000003", "0.95",\
 				   ], stdout=log4, shell = USE_SHELL)
 		
-	node5 = Popen(["./node", "-a", "0000000000000005", "-l",\
+	node5 = Popen(["./node", "-t", "static", "-a", "0000000000000005", "-l",\
 				   "0000000000000001", "0.95",\
 				   "0000000000000002", "0.99",\
 				   ], stdout=log5, shell = USE_SHELL)
 	
-	node6 = Popen(["./node", "-a", "0000000000000006", "-l",\
+	node6 = Popen(["./node", "-t", "static", "-a", "0000000000000006", "-l",\
 				   "0000000000000003", "0.95",\
 				   ], stdout=log6, shell = USE_SHELL)
 

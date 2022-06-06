@@ -6,8 +6,8 @@
 #include <stddef.h>
 #include <string.h>
 
-#define RREQ_TYPE 0x01
-#define RREP_TYPE 0x02
+#define AODV_RREQ_TYPE 0x01
+#define AODV_RREP_TYPE 0x02
 
 typedef struct rreq_t {
 	uint8_t type;		///<always set to 0x01 for RREQ messages
@@ -43,6 +43,11 @@ typedef struct route_table_entry_t {
 	uint64_t next_hop_addr;
 } route_table_entry_t;
 
+typedef enum {
+	FORWARD,
+	DISCARD,
+	RREP
+} aodv_handle_rreq_return_t;
 
 void aodv_init(uint64_t my_addr);
 
@@ -50,20 +55,33 @@ void aodv_init(uint64_t my_addr);
  *  @param next_hop_addr pointer to a variable to store the next hop address
  *  @return returns true if a valid next hop exists in the routing table, returns false otherwise
  */
-bool get_next_hop_address(uint64_t * next_hop_addr, const uint64_t dst_addr);
+bool aodv_get_next_hop_address(uint64_t * next_hop_addr, const uint64_t dst_addr);
 
 /** @brief get the sequence number for a routing table entry if it exists
  *  @param addr the address that owns the sequence number being searched for
  *  @param seq_num pointer to the sequence number where it will be written to if it is found
  *  @return  return true if the sequence number was found, return false otherwise
  */
-bool get_dst_seq(uint64_t addr, uint32_t * seq_num);
+bool aodv_get_dst_seq(uint64_t addr, uint32_t * seq_num);
 
 /** @brief create a route request message that is ready to be broadcast
  *  @rreq pointer to a rreq_t struct that will hold the rreq message
  *  @dst_addr address of the node a route is being requested for
  *  @return return true if a rreq message could be generated, return false otherwise
  */
-bool generate_rreq(rreq_t * rreq, const uint64_t dst_addr);
+bool aodv_generate_rreq(rreq_t * rreq, const uint64_t dst_addr);
+
+/** @brief handle a new RREQ frame that was received, return type determines whether or not it should be forwarded
+ *  @brief rreq pointer to the RREQ frame
+ *  @brief immediate_addr address of the node one hop away that sent this RREQ but didn't necessarily originate it
+ *  @return enum typedef indicating what action should be taken by the calling function
+ */
+aodv_handle_rreq_return_t aodv_handle_rreq(uint64_t immediate_addr, rreq_t * rreq);
+
+
+
+///////// print functions //////////
+
+void print_rreq(rreq_t * rreq);
 
 #endif // aodv_h

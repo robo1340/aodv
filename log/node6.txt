@@ -1,12 +1,11 @@
+default type selected: STATIC
+my addr: 6
 new link at address 3
 node_main()
-ind 0
-sending message to 3
-send frame()
-ind 0
-sending message to 3
-send frame()
-ind 0
-sending message to 3
-send frame()
+handle_received_frame()
+RREQ Message
+{ dst_addr : 6 src_addr : 1, src_seq : 1, hop_cnt : 2, id : 1}
+aodv_state.my_addr 6
+rreq->dst_addr 6
+send RREP in response to RREQ
 poller interrupted

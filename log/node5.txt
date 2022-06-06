@@ -1,17 +1,21 @@
+default type selected: STATIC
+my addr: 5
 new link at address 1
 new link at address 2
 node_main()
 handle_received_frame()
-[0x 0,0x 1,0x 2,0x 3,0x 4]
+RREQ Message
+{ dst_addr : 6 src_addr : 1, src_seq : 1, hop_cnt : 0, id : 1}
+aodv_state.my_addr 5
+rreq->dst_addr 6
+forward RREQ
+broadcast_frame() -> 1 | 2 | 
 handle_received_frame()
-[0x 0,0x 1,0x 2,0x 3,0x 4]
+RREQ Message
+{ dst_addr : 6 src_addr : 1, src_seq : 1, hop_cnt : 2, id : 1}
+discard RREQ
 handle_received_frame()
-[0x 0,0x 1,0x 2,0x 3,0x 4]
-handle_received_frame()
-[0x 0,0x 1,0x 2,0x 3,0x 4]
-ind 0
-sending message to 1
-send frame()
-handle_received_frame()
-[0x 0,0x 1,0x 2,0x 3,0x 4]
+RREQ Message
+{ dst_addr : 6 src_addr : 1, src_seq : 1, hop_cnt : 1, id : 1}
+discard RREQ
 poller interrupted
